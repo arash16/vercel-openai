@@ -9,9 +9,9 @@ export default async function handler(req: NextRequest) {
   url.host = 'api.openai.com';
   url.pathname = url.pathname.replace(/^\/api/, '');
 
-  const headers = new Headers();
-  const auth = req.headers.get('Authorization');
-  if (auth) headers.set('Authorization', auth);
+  const headers = new Headers(req.headers);
+  headers.delete('x-forwarded-for');
+  headers.delete('x-real-ip');
 
   const response = await fetch(url, {
     method: req.method,
